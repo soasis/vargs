@@ -37,12 +37,13 @@
 
 namespace {
 #define make_mulN(TYPE, NAME, N)                                      \
+	template <typename T = int>                                      \
 	static TYPE NAME##_mul##N(...) {                                 \
 		TYPE accumulation           = 1;                            \
 		[[maybe_unused]] TYPE value = 0;                            \
 		ztdc_va_list vl;                                            \
 		ztdc_va_start(vl);                                          \
-		if constexpr (N > 0) {                                      \
+		if constexpr (std::is_same_v<int, T> && N != 0) {           \
 			for (std::size_t index = 0; index < N; ++index) {      \
 				value = ztdc_va_arg(vl, TYPE);                    \
 				REQUIRE(value == (static_cast<TYPE>(index + 2))); \

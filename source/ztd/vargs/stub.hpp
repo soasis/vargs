@@ -27,41 +27,26 @@
 //
 // ============================================================================>
 
-#include <ztd/vargs/version.h>
+#ifndef ZTD_VARGS_SOURCE_STUB_HPP
+#define ZTD_VARGS_SOURCE_STUB_HPP
 
-#include <climits>
+#include <ztd/vargs/va_intrinsics.h>
 
-// clang-format off
-#if ZTD_IS_ON(ZTD_COMPILER_VCXX_I_) && ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
-	#if defined(_M_AMD64)
-		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_ON
-		#include "windows/vc++/x64.hpp"
-	#else
-	// #elif defined(_M_IX86)
-	// #elif defined(_M_ARM)
-	// #elif defined(_M_ARM64)
-		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-	#endif
-#elif ZTD_IS_ON(ZTD_COMPILER_GCC_I_) || ZTD_IS_ON(ZTD_COMPILER_CLANG_I_)
-	// Clang and GCC normally use the same argument conventions....
-	// ... right?
-	#if SIZE_MAX >= 0xFFFFFFFFFFFFFFFFULL
-		#if ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
-			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-			//#include "windows/gcc/x64.hpp"
-		#else
-			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-		#endif
-	#else
-		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-	#endif
-#else
-	// found nothing!
-	#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-#endif
+#include <ztd/idk/assert.hpp>
 
-#if ZTD_IS_OFF(ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_)
-	#include "stub.hpp"
-#endif
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
 
-// clang-format on
+extern "C" void __ztdc_va_start([[maybe_unused]] ztdc_va_list* __p_untyped_vl,
+     [[maybe_unused]] void* __return_address) noexcept {
+	std::abort();
+}
+
+extern "C" void* __ztdc_va_next([[maybe_unused]] ztdc_va_list* __p_vl,
+     [[maybe_unused]] size_t __size, [[maybe_unused]] size_t __alignment,
+     [[maybe_unused]] __ztdc_vargs_detail_broad_type __broad_type) noexcept {
+	std::abort();
+}
+
+#endif // ZTD_VARGS_SOURCE_STUB_HPP

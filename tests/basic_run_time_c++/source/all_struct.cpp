@@ -36,7 +36,8 @@
 #include <cstddef>
 
 struct small {
-	long long value;
+	short value;
+	char padding[1]; // keep it small, even if it pads
 };
 
 struct large {
@@ -47,12 +48,13 @@ struct large {
 namespace {
 
 #define make_mulN(TYPE, NAME, N)                                                           \
+	template <typename T = int>                                                           \
 	static TYPE NAME##_mul##N(...) {                                                      \
-		TYPE accumulation           = { 1 };                                             \
-		[[maybe_unused]] TYPE value = { 0 };                                             \
+		TYPE accumulation           = { 1, {} };                                         \
+		[[maybe_unused]] TYPE value = { 0, {} };                                         \
 		ztdc_va_list vl;                                                                 \
 		ztdc_va_start(vl);                                                               \
-		if constexpr (N > 0) {                                                           \
+		if constexpr (std::is_same_v<T, int> && N > 0) {                                 \
 			for (std::size_t index = 0; index < N; ++index) {                           \
 				value = ztdc_va_arg(vl, TYPE);                                         \
 				REQUIRE(value.value == static_cast<decltype(value.value)>(index + 2)); \
@@ -86,8 +88,8 @@ namespace {
 } // namespace
 
 static large large_mul7x(...) {
-	large accumulation           = { 1 };
-	[[maybe_unused]] large value = { 0 };
+	large accumulation           = { 1, {} };
+	[[maybe_unused]] large value = { 0, {} };
 	ztdc_va_list vl;
 	ztdc_va_start(vl);
 	for (std::size_t index = 0; index < 7; ++index) {
@@ -111,18 +113,27 @@ TEST_CASE("vargs/smalls", "check small struct multiples from 1 to 8 through va_a
 	static_assert(true, "🙏")
 
 
-	MUL_SECTION(0, small { 1 }, small { 2 });
-	MUL_SECTION(1, small { 2 }, small { 2 });
-	MUL_SECTION(2, small { 6 }, small { 2 }, small { 3 });
-	MUL_SECTION(3, small { 24 }, small { 2 }, small { 3 }, small { 4 });
-	MUL_SECTION(4, small { 120 }, small { 2 }, small { 3 }, small { 4 }, small { 5 });
-	MUL_SECTION(5, small { 720 }, small { 2 }, small { 3 }, small { 4 }, small { 5 }, small { 6 });
-	MUL_SECTION(6, small { 5040 }, small { 2 }, small { 3 }, small { 4 }, small { 5 }, small { 6 },
-	     small { 7 });
-	MUL_SECTION(7, small { 40320 }, small { 2 }, small { 3 }, small { 4 }, small { 5 },
-	     small { 6 }, small { 7 }, small { 8 });
-	MUL_SECTION(8, small { 362880 }, small { 2 }, small { 3 }, small { 4 }, small { 5 },
-	     small { 6 }, small { 7 }, small { 8 }, small { 9 });
+	MUL_SECTION(0, (small { static_cast<short>(1), {} }), (small { static_cast<short>(2), {} }));
+	MUL_SECTION(1, (small { static_cast<short>(2), {} }), (small { static_cast<short>(2), {} }));
+	MUL_SECTION(2, (small { static_cast<short>(6), {} }), (small { static_cast<short>(2), {} }),
+	     (small { static_cast<short>(3), {} }));
+	MUL_SECTION(3, (small { static_cast<short>(24), {} }), (small { static_cast<short>(2), {} }),
+	     (small { static_cast<short>(3), {} }), (small { static_cast<short>(4), {} }));
+	MUL_SECTION(4, (small { static_cast<short>(120), {} }), (small { static_cast<short>(2), {} }),
+	     (small { static_cast<short>(3), {} }), (small { static_cast<short>(4), {} }),
+	     (small { static_cast<short>(5), {} }));
+	MUL_SECTION(5, (small { static_cast<short>(720), {} }), (small { static_cast<short>(2), {} }),
+	     (small { static_cast<short>(3), {} }), (small { static_cast<short>(4), {} }),
+	     (small { static_cast<short>(5), {} }), (small { static_cast<short>(6), {} }));
+	MUL_SECTION(6, (small { static_cast<short>(5040), {} }), (small { static_cast<short>(2), {} }),
+	     (small { static_cast<short>(3), {} }), (small { static_cast<short>(4), {} }),
+	     (small { static_cast<short>(5), {} }), (small { static_cast<short>(6), {} }),
+	     (small { static_cast<short>(7), {} }));
+	MUL_SECTION(7, (small { static_cast<short>(40320), {} }),
+	     (small { static_cast<short>(2), {} }), (small { static_cast<short>(3), {} }),
+	     (small { static_cast<short>(4), {} }), (small { static_cast<short>(5), {} }),
+	     (small { static_cast<short>(6), {} }), (small { static_cast<short>(7), {} }),
+	     (small { static_cast<short>(8), {} }));
 #undef MUL_SECTION
 }
 
@@ -139,23 +150,44 @@ TEST_CASE("vargs/large", "check large struct multiples from 1 to 8 through va_ar
 
 	SECTION("large mul7x") {
 		std::uint_least64_t canary0 = expected_canary0;
-		large value = large_mul7x(large { 2 }, large { 3 }, large { 4 }, large { 5 }, large { 6 },
-		     large { 7 }, large { 8 });
-		REQUIRE(value.value == (large { 40320 }.value));
+		large value                 = large_mul7x((large { static_cast<long long>(2), {} }),
+               (large { static_cast<long long>(3), {} }), (large { static_cast<long long>(4), {} }),
+               (large { static_cast<long long>(5), {} }), (large { static_cast<long long>(6), {} }),
+               (large { static_cast<long long>(7), {} }),
+               (large { static_cast<long long>(8), {} }));
+		REQUIRE(value.value == ((large { static_cast<long long>(40320), {} }).value));
 		REQUIRE(canary0 == expected_canary0);
 	}
 
-	MUL_SECTION(0, large { 1 }, large { 2 });
-	MUL_SECTION(1, large { 2 }, large { 2 });
-	MUL_SECTION(2, large { 6 }, large { 2 }, large { 3 });
-	MUL_SECTION(3, large { 24 }, large { 2 }, large { 3 }, large { 4 });
-	MUL_SECTION(4, large { 120 }, large { 2 }, large { 3 }, large { 4 }, large { 5 });
-	MUL_SECTION(5, large { 720 }, large { 2 }, large { 3 }, large { 4 }, large { 5 }, large { 6 });
-	MUL_SECTION(6, large { 5040 }, large { 2 }, large { 3 }, large { 4 }, large { 5 }, large { 6 },
-	     large { 7 });
-	MUL_SECTION(7, large { 40320 }, large { 2 }, large { 3 }, large { 4 }, large { 5 },
-	     large { 6 }, large { 7 }, large { 8 });
-	MUL_SECTION(8, large { 362880 }, large { 2 }, large { 3 }, large { 4 }, large { 5 },
-	     large { 6 }, large { 7 }, large { 8 }, large { 9 });
+	MUL_SECTION(
+	     0, (large { static_cast<long long>(1), {} }), (large { static_cast<long long>(2), {} }));
+	MUL_SECTION(
+	     1, (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(2), {} }));
+	MUL_SECTION(2, (large { static_cast<long long>(6), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }));
+	MUL_SECTION(3, (large { static_cast<long long>(24), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }));
+	MUL_SECTION(4, (large { static_cast<long long>(120), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }), (large { static_cast<long long>(5), {} }));
+	MUL_SECTION(5, (large { static_cast<long long>(720), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }), (large { static_cast<long long>(5), {} }),
+	     (large { static_cast<long long>(6), {} }));
+	MUL_SECTION(6, (large { static_cast<long long>(5040), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }), (large { static_cast<long long>(5), {} }),
+	     (large { static_cast<long long>(6), {} }), (large { static_cast<long long>(7), {} }));
+	MUL_SECTION(7, (large { static_cast<long long>(40320), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }), (large { static_cast<long long>(5), {} }),
+	     (large { static_cast<long long>(6), {} }), (large { static_cast<long long>(7), {} }),
+	     (large { static_cast<long long>(8), {} }));
+	MUL_SECTION(8, (large { static_cast<long long>(362880), {} }),
+	     (large { static_cast<long long>(2), {} }), (large { static_cast<long long>(3), {} }),
+	     (large { static_cast<long long>(4), {} }), (large { static_cast<long long>(5), {} }),
+	     (large { static_cast<long long>(6), {} }), (large { static_cast<long long>(7), {} }),
+	     (large { static_cast<long long>(8), {} }), (large { static_cast<long long>(9), {} }));
 #undef MUL_SECTION
 }

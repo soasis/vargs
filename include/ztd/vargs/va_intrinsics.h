@@ -47,7 +47,7 @@
 #include <intrin.h>
 #define __ztdc_va_start_platform(_VL) __ztdc_va_start(&(_VL), _AddressOfReturnAddress())
 #else
-#error This isn't a platform we can work with, unfortunately!
+#error "This isn't a platform we can work with, unfortunately!"
 #endif
 
 

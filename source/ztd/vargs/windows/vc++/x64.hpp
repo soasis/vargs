@@ -27,8 +27,8 @@
 //
 // ============================================================================>
 
-#ifndef ZTD_VARGS_SOURCE_VCXX_X64_HPP
-#define ZTD_VARGS_SOURCE_VCXX_X64_HPP
+#ifndef ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
+#define ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
 
 #include <ztd/vargs/va_intrinsics.h>
 
@@ -87,16 +87,11 @@ namespace {
 			}
 		}
 	}
-
-	void* __ztdc_align_stack_pointer(void* __ptr) {
-		std::uintptr_t __address = reinterpret_cast<uintptr_t>(__ptr);
-		return reinterpret_cast<void*>(__address + (__address % 16));
-	}
 } // namespace
 
 extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address) noexcept {
 	ztdc_va_list& __vl       = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	__vl.__stack_position    = __ztdc_align_stack_pointer(__return_address);
+	__vl.__stack_position    = __return_address;
 	__vl.__argument_position = 0;
 	__vl.__home[0]           = __ztdc_vcxx_x64_read_homed_register_rcx(__vl.__stack_position);
 	__vl.__home[1]           = __ztdc_vcxx_x64_read_homed_register_rdx(__vl.__stack_position);
@@ -146,4 +141,4 @@ extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __al
 	return __target;
 }
 
-#endif // ZTD_VARGS_SOURCE_VCXX_X64_HPP
+#endif // ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP

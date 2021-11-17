@@ -48,7 +48,7 @@ project(ztd.vargs
   VERSION 0.0.0
   DESCRIPTION "Code to access Variable Arguments (\"var args\") without the cruft of an inital first parameter."
   HOMEPAGE_URL "https://ztdvargs.readthedocs.io/en/latest/"
-  LANGUAGES C CXX ASM_MASM)
+  LANGUAGES C CXX ASM_MASM ASM)
 
 if (ZTD_VARGS_READTHEDOCS)
 	# ReadTheDocs seems unable to handle the include at the project level: something must be going wrong?
@@ -134,10 +134,26 @@ file(GLOB_RECURSE ztd.vargs.sources
 	LIST_DIRECTORIES FALSE
 	CONFIGURE_DEPENDS
 	source/*.c source/*.cpp)
-file(GLOB_RECURSE ztd.vargs.sources.asm
-	LIST_DIRECTORIES FALSE
-	CONFIGURE_DEPENDS
-	source/*.asm)
+
+if (WIN32)
+	if (MSVC)
+		if (CMAKE_SIZEOF_VOID_P GREATER_OR_EQUAL_TO 8)
+			message(STATUS "[ztd.vargs] Using Windows VC++ x64 Assembly files")
+			file(GLOB_RECURSE ztd.vargs.sources.asm
+				LIST_DIRECTORIES FALSE
+				CONFIGURE_DEPENDS
+				source/*/windows/vc++/*.asm)
+		endif()
+	elseif (GCC OR MINGW)
+		if (CMAKE_SIZEOF_VOID_P GREATER_EQUAL 8)
+			message(STATUS "[ztd.vargs] Using Windows GCC x64 Assembly files")
+			file(GLOB_RECURSE ztd.vargs.sources.asm
+				LIST_DIRECTORIES FALSE
+				CONFIGURE_DEPENDS
+				source/*/windows/gcc/*.s)
+		endif()
+	endif()
+endif()
 
 add_library(ztd.vargs ${ztd.vargs.sources} ${ztd.vargs.sources.asm})
 add_library(ztd::vargs ALIAS ztd.vargs)

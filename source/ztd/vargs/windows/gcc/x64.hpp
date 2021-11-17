@@ -1,4 +1,3 @@
-
 // =============================================================================
 //
 // ztd.vargs
@@ -28,8 +27,8 @@
 //
 // ============================================================================>
 
-#ifndef ZTD_VARGS_SOURCE_MSVC_X64_HPP
-#define ZTD_VARGS_SOURCE_MSVC_X64_HPP
+#ifndef ZTD_VARGS_SOURCE_WINDOWS_GCC_X64_HPP
+#define ZTD_VARGS_SOURCE_WINDOWS_GCC_X64_HPP
 
 #include <ztd/vargs/va_intrinsics.h>
 
@@ -38,40 +37,12 @@
 #include <cstddef>
 #include <cstdint>
 
-#include <Windows.h>
-
-extern "C" uintptr_t __ztdc_read_register_rcx() noexcept;
-extern "C" uintptr_t __ztdc_read_register_rdx() noexcept;
-extern "C" uintptr_t __ztdc_read_register_r8() noexcept;
-extern "C" uintptr_t __ztdc_read_register_r9() noexcept;
-extern "C" uintptr_t __ztdc_read_register_xmm0() noexcept;
-extern "C" uintptr_t __ztdc_read_register_xmm1() noexcept;
-extern "C" uintptr_t __ztdc_read_register_xmm2() noexcept;
-extern "C" uintptr_t __ztdc_read_register_xmm3() noexcept;
-
-typedef struct __ztdc_va_list {
-	va_list __old;
-	size_t __first_argument;
-	size_t __argument_position;
-	CONTEXT __context;
-} __ztdc_va_list;
-
-extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl) noexcept {
-	__ztdc_va_list& __vl = *static_cast<__ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	RtlCaptureContext(&__vl.__context);
-	__vl.__argument_position = 0;
+extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address) noexcept {
+	ztdc_va_list& __vl = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
 }
 
-extern "C" void __ztdc_va_start_msvc_x64(ztdc_va_list* __p_untyped_vl) noexcept {
-	__ztdc_va_list& __vl = *static_cast<__ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	RtlCaptureContext(&__vl.__context);
-	__vl.__argument_position = 0;
-}
-
-extern "C" void* __ztdc_va_next(ztdc_va_list* __p_untyped_vl, size_t __size, size_t __alignment,
+extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __alignment,
      __ztdc_vargs_detail_broad_type __broad_type) noexcept {
-	__ztdc_va_list& __vl = *static_cast<__ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	return nullptr;
 }
 
-#endif // ZTD_VARGS_SOURCE_MSVC_X64_HPP
+#endif // ZTD_VARGS_SOURCE_WINDOWS_GCC_X64_HPP
