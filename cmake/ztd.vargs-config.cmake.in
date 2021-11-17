@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+if (TARGET ztd::vargs)
+	get_target_property(ZTD_VARGS_INCLUDE_DIRS
+		ztd.vargs INTERFACE_INCLUDE_DIRECTORIES)
+	set_and_check(ZTD_VARGS_INCLUDE_DIRS "${ZTD_VARGS_INCLUDE_DIRS}")
+endif()
