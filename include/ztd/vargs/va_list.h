@@ -33,7 +33,6 @@
 #include <ztd/vargs/version.h>
 
 #if ZTD_IS_ON(ZTD_C_I_)
-#include <stdlign.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
@@ -60,7 +59,7 @@ typedef struct ztdc_va_list {
 	void* __stack_position;
 	//////
 	/// @brief Private. Do not use.
-	void* __home[8];
+	void* __home[9];
 } ztdc_va_list;
 
 //////

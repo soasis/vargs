@@ -36,7 +36,6 @@
 #include <ztd/vargs/detail/broad_type.h>
 
 #if ZTD_IS_ON(ZTD_C_I_)
-#include <stdalign.h>
 #include <stddef.h>
 #else
 #include <cstddef>
@@ -54,10 +53,10 @@
 
 ZTD_EXTERN_C_OPEN_I_
 
-extern "C" void* __ztdc_va_next(ztdc_va_list* __vl, size_t __type_size, size_t __type_alignment,
+void* __ztdc_va_next(ztdc_va_list* __vl, size_t __type_size, size_t __type_alignment,
      __ztdc_vargs_detail_broad_type __broad_type) ZTD_NOEXCEPT_IF_CXX_I_;
-extern "C" void __ztdc_va_start(ztdc_va_list* __vl, void* __return_address) ZTD_NOEXCEPT_IF_CXX_I_;
-extern "C" void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
+void __ztdc_va_start(ztdc_va_list* __vl, void* __return_address) ZTD_NOEXCEPT_IF_CXX_I_;
+void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 
 //////
 /// @addtogroup ztdc_va_arg_intrinsics Variable Argument Intrinsics

@@ -46,7 +46,7 @@ set(CMAKE_PROJECT_INCLUDE ${ZTD_CMAKE_PROJECT_PRELUDE})
 # the languages the project is going to use. Required.
 project(ztd.vargs
   VERSION 0.0.0
-  DESCRIPTION "Code to access\"Varargs\" without the cruft of an inital first parameter."
+  DESCRIPTION "Code to access Variable Arguments (\"var args\") without the cruft of an inital first parameter."
   HOMEPAGE_URL "https://ztdvargs.readthedocs.io/en/latest/"
   LANGUAGES C CXX ASM_MASM)
 

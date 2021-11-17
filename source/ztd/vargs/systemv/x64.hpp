@@ -71,8 +71,7 @@ extern "C" void __ztdc_va_start_msvc_x64(ztdc_va_list* __p_untyped_vl) noexcept 
 extern "C" void* __ztdc_va_next(ztdc_va_list* __p_untyped_vl, size_t __size, size_t __alignment,
      __ztdc_vargs_detail_broad_type __broad_type) noexcept {
 	__ztdc_va_list& __vl = *static_cast<__ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-
-	return __target;
+	return nullptr;
 }
 
 #endif // ZTD_VARGS_SOURCE_MSVC_X64_HPP

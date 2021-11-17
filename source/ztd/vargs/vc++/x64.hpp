@@ -39,45 +39,87 @@
 
 #include <Windows.h>
 
-extern "C" void* __ztdc_read_homed_register_rcx(void* __return_address) noexcept;
-extern "C" void* __ztdc_read_homed_register_rdx(void* __return_address) noexcept;
-extern "C" void* __ztdc_read_homed_register_r8(void* __return_address) noexcept;
-extern "C" void* __ztdc_read_homed_register_r9(void* __return_address) noexcept;
-extern "C" double __ztdc_read_register_xmm0(void) noexcept;
-extern "C" double __ztdc_read_register_xmm1(void) noexcept;
-extern "C" double __ztdc_read_register_xmm2(void) noexcept;
-extern "C" double __ztdc_read_register_xmm3(void) noexcept;
+extern "C" void* __ztdc_vcxx_x64_read_homed_register_rcx(void* __return_address) noexcept;
+extern "C" void* __ztdc_vcxx_x64_read_homed_register_rdx(void* __return_address) noexcept;
+extern "C" void* __ztdc_vcxx_x64_read_homed_register_r8(void* __return_address) noexcept;
+extern "C" void* __ztdc_vcxx_x64_read_homed_register_r9(void* __return_address) noexcept;
+extern "C" double __ztdc_vcxx_x64_read_register_xmm0(void) noexcept;
+extern "C" double __ztdc_vcxx_x64_read_register_xmm1(void) noexcept;
+extern "C" double __ztdc_vcxx_x64_read_register_xmm2(void) noexcept;
+extern "C" double __ztdc_vcxx_x64_read_register_xmm3(void) noexcept;
 
-inline void* __ztdc_vararg_to_value(void*& __arg, size_t __position, size_t __size,
-     size_t __alignment, __ztdc_vargs_detail_broad_type __broad_type) {
-	if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE) {
-		// references are returned as a single indirection, so they can be used directly:
-		// T* -> void* -> T* -> T&
-		return __arg;
+namespace {
+	template <bool _IsIndirect = true>
+	void* __ztdc_vcxx_x64_vararg_to_value(void*& __arg, size_t __position, size_t __size,
+	     size_t __alignment, __ztdc_vargs_detail_broad_type __broad_type) noexcept {
+		if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE) {
+			// references are returned as a single indirection, so they can be used directly:
+			// T* -> void* -> T* -> T&
+			return __arg;
+		}
+		else {
+			if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT) {
+				switch (__size) {
+				case sizeof(float): {
+					// we must first get the double value, then do a
+					// proper semantic cast
+					double __value = *(_IsIndirect ? reinterpret_cast<double*>(&__arg)
+					                               : reinterpret_cast<double*>(__arg));
+					float __fvalue = __value;
+					// reinterpret it into an argument here
+					__arg = *reinterpret_cast<void**>(static_cast<float*>(&__fvalue));
+					return reinterpret_cast<void*>(&__arg);
+				} break;
+				case sizeof(double):
+					// values are returned as a double-indirection, so they can be cast:
+					// T& -> T* -> void* -> T* -> T&
+					return (_IsIndirect ? reinterpret_cast<void*>(&__arg) : __arg);
+				default:
+					// unknown float???
+					ZTD_ASSERT(false);
+					break;
+				}
+			}
+			else {
+				// values are returned as a double-indirection, so they can be cast:
+				// T& -> T* -> void* -> T* -> T&
+				return (_IsIndirect ? reinterpret_cast<void*>(&__arg) : __arg);
+			}
+		}
 	}
-	else {
-		// values are returned as a double-indirection, so they can be cast:
-		// T& -> T* -> void* -> T* -> T&
-		return reinterpret_cast<void*>(&__arg);
+
+	void* __ztdc_align_stack_pointer(void* __ptr) {
+		std::uintptr_t __address = reinterpret_cast<uintptr_t>(__ptr);
+		return reinterpret_cast<void*>(__address + (__address % 16));
 	}
-}
+} // namespace
 
 extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address) noexcept {
 	ztdc_va_list& __vl       = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	__vl.__stack_position    = __return_address;
+	__vl.__stack_position    = __ztdc_align_stack_pointer(__return_address);
 	__vl.__argument_position = 0;
-	__vl.__home[0]           = __ztdc_read_homed_register_rcx(__vl.__stack_position);
-	__vl.__home[1]           = __ztdc_read_homed_register_rdx(__vl.__stack_position);
-	__vl.__home[2]           = __ztdc_read_homed_register_r8(__vl.__stack_position);
-	__vl.__home[3]           = __ztdc_read_homed_register_r9(__vl.__stack_position);
-	double __xmm0_val        = __ztdc_read_register_xmm0();
-	double __xmm1_val        = __ztdc_read_register_xmm1();
-	double __xmm2_val        = __ztdc_read_register_xmm2();
-	double __xmm3_val        = __ztdc_read_register_xmm3();
+	__vl.__home[0]           = __ztdc_vcxx_x64_read_homed_register_rcx(__vl.__stack_position);
+	__vl.__home[1]           = __ztdc_vcxx_x64_read_homed_register_rdx(__vl.__stack_position);
+	__vl.__home[2]           = __ztdc_vcxx_x64_read_homed_register_r8(__vl.__stack_position);
+	__vl.__home[3]           = __ztdc_vcxx_x64_read_homed_register_r9(__vl.__stack_position);
+#if 0
+	// xmm registers are very flaky and cannot be depended on
+	// when writing C or C++ code
+	double __xmm0_val        = __ztdc_vcxx_x64_read_register_xmm0();
+	double __xmm1_val        = __ztdc_vcxx_x64_read_register_xmm1();
+	double __xmm2_val        = __ztdc_vcxx_x64_read_register_xmm2();
+	double __xmm3_val        = __ztdc_vcxx_x64_read_register_xmm3();
 	__vl.__home[4]           = *reinterpret_cast<void**>(&__xmm0_val);
 	__vl.__home[5]           = *reinterpret_cast<void**>(&__xmm1_val);
 	__vl.__home[6]           = *reinterpret_cast<void**>(&__xmm2_val);
 	__vl.__home[7]           = *reinterpret_cast<void**>(&__xmm3_val);
+#else
+	__vl.__home[4] = __vl.__home[0];
+	__vl.__home[5] = __vl.__home[1];
+	__vl.__home[6] = __vl.__home[2];
+	__vl.__home[7] = __vl.__home[3];
+#endif
+	__vl.__home[8] = nullptr;
 }
 
 extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __alignment,
@@ -89,18 +131,15 @@ extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __al
 	case 1:
 	case 2:
 	case 3: {
-		if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT) {
-			__target = __ztdc_vararg_to_value(__vl.__home[__vl.__argument_position + 4],
-			     __vl.__argument_position, __size, __alignment, __broad_type);
-		}
-		else {
-			__target = __ztdc_vararg_to_value(__vl.__home[__vl.__argument_position],
-			     __vl.__argument_position, __size, __alignment, __broad_type);
-		}
+		__target = __ztdc_vcxx_x64_vararg_to_value(__vl.__home[__vl.__argument_position],
+		     __vl.__argument_position, __size, __alignment, __broad_type);
 	} break;
 	default: {
-		// fallback to start
-		ZTD_ASSERT(false);
+		// values are stored directly, now!
+		__vl.__home[8] = static_cast<void*>(static_cast<unsigned char*>(__vl.__stack_position)
+		     + (sizeof(void*)) + (__vl.__argument_position * sizeof(void*)));
+		__target       = __ztdc_vcxx_x64_vararg_to_value<false>(
+               __vl.__home[8], __vl.__argument_position, __size, __alignment, __broad_type);
 	} break;
 	}
 	__vl.__argument_position += 1;

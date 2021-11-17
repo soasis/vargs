@@ -33,19 +33,27 @@ Supported Architectures
 
 Each architecture needs to be supported explicitly, with occasional builtins or other things aiding in iteration and work. If you'd like to contribute an implementation, please make a patch to the repository!
 
-.. csv-table:: Architecture List
-	:header: "Compiler", "Architecture", "Supported?"
-	:widths: 15, 10, 30
+Furthermore, it is imperative to note the various circumstances this can appear under in C++ includes member functions. Unfortunately, we have not yet developed a way of knowing this information, and member functions do change the way the compiler interacts with the ABI and where it places arguments.
 
-	"Microsoft Visual C++", "x86_64 (AMD64)", "✅"
-	"", "x86 (i686)", "❌"
-	"", "ARM", "❌"
-	"", "ARM64", "❌"
-	"Clang", "x86_64 (AMD64)", "❌"
-	"", "x86 (i686)", "❌"
-	"", "ARM", "❌"
-	"", "ARM64", "❌"
-	"GCC", "x86_64 (AMD64)", "❌"
-	"", "x86 (i686)", "❌"
-	"", "ARM", "❌"
-	"", "ARM64", "❌"
+.. csv-table:: Architecture List
+	:header: "Compiler", "Architecture", "Supported?" "Notes / Documentation"
+	:widths: 1, 1, 1, 1
+
+	"Microsoft Visual C++", "x86_64 (AMD64)", "✅", ":doc:`Notes </architectures/vc++/x64>`"
+	"", "x86 (i686)", "❌", "❌"
+	"", "ARM", "❌", "❌"
+	"", "ARM64", "❌", "❌"
+	"Clang", "x86_64 (AMD64)", "❌", "❌"
+	"", "x86 (i686)", "❌", "❌"
+	"", "ARM", "❌", "❌"
+	"", "ARM64", "❌", "❌"
+	"GCC", "x86_64 (AMD64)", "❌", "❌"
+	"", "x86 (i686)", "❌", "❌"
+	"", "ARM", "❌", "❌"
+	"", "ARM64", "❌", "❌"
+
+.. toctree::
+	:hidden:
+	:glob:
+
+	architectures/**

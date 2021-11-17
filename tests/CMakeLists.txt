@@ -38,7 +38,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-add_subdirectory(basic_run_time)
-add_subdirectory(compile_time)
+add_subdirectory(basic_run_time_c++)
 add_subdirectory(inclusion)
 add_subdirectory(inclusion_as_c++)
