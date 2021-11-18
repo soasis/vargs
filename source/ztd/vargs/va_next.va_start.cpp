@@ -32,26 +32,33 @@
 #include <climits>
 
 // clang-format off
-#if ZTD_IS_ON(ZTD_COMPILER_VCXX_I_) && ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
-	#if defined(_M_AMD64)
-		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_ON
-		#include "windows/vc++/x64.hpp"
-	#else
-	// #elif defined(_M_IX86)
-	// #elif defined(_M_ARM)
-	// #elif defined(_M_ARM64)
+// windows
+#if ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
+	// mingw
+	#if ZTD_IS_ON(ZTD_COMPILER_GCC_I_)
 		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-	#endif
-#elif ZTD_IS_ON(ZTD_COMPILER_GCC_I_) || ZTD_IS_ON(ZTD_COMPILER_CLANG_I_)
-	// Clang and GCC normally use the same argument conventions....
-	// ... right?
-	#if SIZE_MAX >= 0xFFFFFFFFFFFFFFFFULL
-		#if ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
-			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
-			//#include "windows/gcc/x64.hpp"
+	#else
+		#if defined(_M_AMD64)
+			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_ON
+			#include "windows/vc++/x64.hpp"
+		// #elif defined(_M_IX86)
+		// #elif defined(_M_ARM)
+		// #elif defined(_M_ARM64)
 		#else
 			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 		#endif
+	#endif
+#elif ZTD_IS_ON(ZTD_COMPILER_GCC_I_) || ZTD_IS_ON(ZTD_COMPILER_CLANG_I_)
+	// on non-windows platforms, clang follows the same ABI as GCC
+	// the following list is taken from microsoft/vcpkg-tool@f6e44dfbd3bb8aaa142ce090098f078547af5f3f
+	#if defined(__x86_64__)
+		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
+	//#elif defined(__x86__) || defined(__i386__)
+	//#elif defined(__arm__)
+	//#elif defined(__aarch64__)
+	//#elif defined(__s390x__)
+	//#elif (defined(__ppc64__) || defined(__PPC64__) || defined(__ppc64le__) || defined(__PPC64LE__)) \
+		&& defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 	#else
 		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 	#endif
