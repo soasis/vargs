@@ -40,7 +40,7 @@
 	#else
 		#if defined(_M_AMD64)
 			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_ON
-			#include "windows/vc++/x64.hpp"
+			#include "windows/x64.hpp"
 		// #elif defined(_M_IX86)
 		// #elif defined(_M_ARM)
 		// #elif defined(_M_ARM64)
