@@ -135,29 +135,22 @@ if(WIN32)
 		set(arch_name "arm")
 	endif()
 
-	if(MSVC)
-		message(STATUS "[ztd.vargs] Using VC++ ${arch_name} assembly files")
-		enable_language(ASM_MASM)
-		file(GLOB_RECURSE ztd.vargs.sources.asm
-			LIST_DIRECTORIES FALSE
-			CONFIGURE_DEPENDS
-			"${ztd.vargs.sources.prefix}/windows/${arch_name}*.asm")
-	elseif (GCC OR MINGW)
+	if(MINGW)
 		message(STATUS "[ztd.vargs] Using mingw ${arch_name} assembly files")
 		enable_language(ASM)
 		file(GLOB_RECURSE ztd.vargs.sources.asm
 			LIST_DIRECTORIES FALSE
 			CONFIGURE_DEPENDS
 			"${ztd.vargs.sources.prefix}/mingw/${arch_name}*.s")
+	else()
+		message(STATUS "[ztd.vargs] Using VC++ ${arch_name} assembly files")
+		enable_language(ASM_MASM)
+		file(GLOB_RECURSE ztd.vargs.sources.asm
+			LIST_DIRECTORIES FALSE
+			CONFIGURE_DEPENDS
+			"${ztd.vargs.sources.prefix}/windows/${arch_name}*.asm")
 	endif()
-	foreach (asm.file ${ztd.vargs.sources.asm})
-		if(NOT EXISTS "${asm.file}")
-			list(REMOVE_ITEM ztd.vargs.sources.asm ${asm.file})
-		endif()
-	endforeach()
 endif()
-
-message(STATUS "[ztd.vargs] ${ztd.vargs.sources.asm}")
 
 add_library(ztd.vargs ${ztd.vargs.sources} ${ztd.vargs.sources.asm})
 add_library(ztd::vargs ALIAS ztd.vargs)
