@@ -47,7 +47,7 @@ project(ztd.vargs
   VERSION 0.0.0
   DESCRIPTION [[Code to access Variable Arguments ("var args") without the cruft of an inital first parameter.]]
   HOMEPAGE_URL "https://ztdvargs.readthedocs.io/en/latest/"
-  LANGUAGES C CXX ASM_MASM ASM)
+  LANGUAGES C CXX)
 
 if(ZTD_VARGS_READTHEDOCS)
 	# ReadTheDocs seems unable to handle the include at the project level: something must be going wrong?
@@ -121,7 +121,7 @@ file(GLOB_RECURSE ztd.vargs.sources
 	CONFIGURE_DEPENDS
 	source/*.c source/*.cpp)
 
-set(ztd.vargs.sources.prefix "${CMAKE_CURRENT_SOURCE_DIR}/source/ztd/vargs"
+set(ztd.vargs.sources.prefix "${CMAKE_CURRENT_SOURCE_DIR}/source/ztd/vargs")
 if(WIN32)
 	# CMAKE_SYSTEM_PROCESSOR will be the result of %PROCESSOR_ARCHITEW6432%, 
 	# and thus will be one of {AMD64, IA64, ARM64, x86, ARM}
@@ -135,18 +135,20 @@ if(WIN32)
 		set(arch_name "arm")
 	endif()
 
-	if(MSVC)
-		message(STATUS "[ztd.vargs] Using VC++ ${arch_name} assembly files")
-		set(ztd.vargs.sources.asm
-			"${ztd.vargs.sources.prefix}/windows/${arch_name}.asm")
-	elseif (GCC OR MINGW)
+	if(MINGW)
 		message(STATUS "[ztd.vargs] Using mingw ${arch_name} assembly files")
-		set(ztd.vargs.sources.asm
-			"${ztd.vargs.sources.prefix}/mingw/${arch_name}.asm")
-	endif()
-
-	if(NOT EXISTS "${ztd.vargs.sources.asm}")
-		set(ztd.vargs.sources.asm "")
+		enable_language(ASM)
+		file(GLOB_RECURSE ztd.vargs.sources.asm
+			LIST_DIRECTORIES FALSE
+			CONFIGURE_DEPENDS
+			"${ztd.vargs.sources.prefix}/mingw/${arch_name}*.s")
+	else()
+		message(STATUS "[ztd.vargs] Using VC++ ${arch_name} assembly files")
+		enable_language(ASM_MASM)
+		file(GLOB_RECURSE ztd.vargs.sources.asm
+			LIST_DIRECTORIES FALSE
+			CONFIGURE_DEPENDS
+			"${ztd.vargs.sources.prefix}/windows/${arch_name}*.asm")
 	endif()
 endif()
 

@@ -27,8 +27,8 @@
 //
 // ============================================================================>
 
-#ifndef ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
-#define ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
+#ifndef ZTD_VARGS_SOURCE_WINDOWS_X64_HPP
+#define ZTD_VARGS_SOURCE_WINDOWS_X64_HPP
 
 #include <ztd/vargs/va_intrinsics.h>
 
@@ -141,4 +141,4 @@ extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __al
 	return __target;
 }
 
-#endif // ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
+#endif // ZTD_VARGS_SOURCE_WINDOWS_X64_HPP
