@@ -31,5 +31,8 @@
 
 #include <ztd/vargs/detail/function_properties.h>
 
-extern __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties
-     = { false, _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER, 0 };
+__ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties(void) {
+	__ztdc_vargs_detail_function_properties __prop
+	     = { false, _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER, 0 };
+	return __prop;
+}

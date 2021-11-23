@@ -162,7 +162,6 @@ target_link_libraries(ztd.vargs
 target_include_directories(ztd.vargs
 	PRIVATE ${PROJECT_SOURCE_DIR}/source/include)
 target_compile_options(ztd.vargs PRIVATE ${ztd-vargs-disable-permissive})
-target_sources(ztd.vargs PRIVATE ${ztd.vargs.includes})
 install(DIRECTORY include/
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )

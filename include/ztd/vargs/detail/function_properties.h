@@ -44,7 +44,9 @@ typedef struct __ztdc_vargs_detail_function_properties {
 	size_t __argument_count;
 } __ztdc_vargs_detail_function_properties;
 
-ZTD_EXTERN_C_I_ __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties;
+ZTD_EXTERN_C_OPEN_I_
+extern __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties(void);
+ZTD_EXTERN_C_CLOSE_I_
 
 #if ZTD_IS_ON(ZTD_C_I_)
 #define _ZTDC_FUNCTION_PROPERTIES(...) __ztdc_vargs_detail_empty_properties
@@ -56,12 +58,12 @@ template <typename>
 struct __ztd_f_traits;
 template <typename _R, typename... _Args>
 struct __ztd_f_traits<_R(_Args..., ...)> {
-	using __return_type = _R;
+	using __return_type                                        = _R;
 	static inline constexpr const std::size_t __argument_count = sizeof...(_Args);
 };
 template <typename _R, typename... _Args>
-struct __ztd_f_traits<_R(*)(_Args..., ...)> {
-	using __return_type = _R;
+struct __ztd_f_traits<_R (*)(_Args..., ...)> {
+	using __return_type                                        = _R;
 	static inline constexpr const std::size_t __argument_count = sizeof...(_Args);
 };
 
@@ -74,11 +76,12 @@ __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_function_properties_
 			_TraitsT::__argument_count };
 	}
 	else {
-		return { false, _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER, 0 };
+		return __ztdc_vargs_detail_empty_properties();
 	}
 }
 
-#define _ZTDC_FUNCTION_PROPERTIES(...) __ztdc_vargs_detail_function_properties_cxx<decltype(__VA_ARGS__)>()
+#define _ZTDC_FUNCTION_PROPERTIES(...) \
+	__ztdc_vargs_detail_function_properties_cxx<decltype(__VA_ARGS__)>()
 #endif
 
 #endif // ZTD_VARGS_DETAIL_FUNCTION_PROPERTIES_H

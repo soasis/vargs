@@ -43,7 +43,10 @@
 #endif
 
 #if ZTD_IS_ON(ZTD_BUILTIN_FRAME_ADDRESS_I_)
-#define __ztdc_va_start_platform(_VL) __ztdc_va_start(&(_VL), __builtin_frame_address(0));
+#define __ztdc_va_start_platform(_VL) \
+	__ztdc_va_start(&(_VL), __builtin_frame_address(0), _ZTDC_FUNCTION_PROPERTIES(0));
+#define __ztdc_va_start_platform_in(_VL, ...) \
+	__ztdc_va_start(&(_VL), __builtin_frame_address(0), _ZTDC_FUNCTION_PROPERTIES(__VA_ARGS__))
 #elif ZTD_IS_ON(ZTD_COMPILER_VCXX_I_) && ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
 #include <intrin.h>
 #define __ztdc_va_start_platform(_VL) \

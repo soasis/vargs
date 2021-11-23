@@ -39,7 +39,7 @@
 #include <cstdlib>
 
 extern "C" void __ztdc_va_start([[maybe_unused]] ztdc_va_list* __p_untyped_vl,
-     [[maybe_unused]] void* __return_address) noexcept {
+     [[maybe_unused]] void* __return_address, [[maybe_unused]] __ztdc_vargs_detail_function_properties __properties) noexcept {
 	std::abort();
 }
 
