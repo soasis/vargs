@@ -70,10 +70,10 @@ struct __ztd_f_traits<_R (*)(_Args..., ...)> {
 template <typename _Type>
 __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_function_properties_cxx() noexcept {
 	if constexpr (::std::is_function_v<::std::remove_pointer_t<_Type>>) {
-		using _TraitsT = ::__ztd_f_traits<::std::remove_pointer_t<_Type>>;
-		return { ::std::is_aggregate_v<typename _TraitsT::__return_type>,
-			_ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(typename _TraitsT::__return_type),
-			_TraitsT::__argument_count };
+		using _TraitsT    = ::__ztd_f_traits<::std::remove_pointer_t<_Type>>;
+		using _ReturnType = typename _TraitsT::__return_type;
+		return { !::std::is_reference_v<_ReturnType> && ::std::is_aggregate_v<_ReturnType>,
+			_ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_ReturnType), _TraitsT::__argument_count };
 	}
 	else {
 		return __ztdc_vargs_detail_empty_properties();
