@@ -53,7 +53,8 @@ namespace {
 		TYPE accumulation           = { 1, {} };                                         \
 		[[maybe_unused]] TYPE value = { 0, {} };                                         \
 		ztdc_va_list vl;                                                                 \
-		ztdc_va_start(vl);                                                               \
+		auto* f = &NAME##_mul##N<int>;\
+		ztdc_va_start_in(vl, f);                                                               \
 		if constexpr (std::is_same_v<T, int> && N > 0) {                                 \
 			for (std::size_t index = 0; index < N; ++index) {                           \
 				value = ztdc_va_arg(vl, TYPE);                                         \
@@ -86,20 +87,6 @@ namespace {
 	make_mulN(large, large, 7);
 	make_mulN(large, large, 8);
 } // namespace
-
-static large large_mul7x(...) {
-	large accumulation           = { 1, {} };
-	[[maybe_unused]] large value = { 0, {} };
-	ztdc_va_list vl;
-	ztdc_va_start(vl);
-	for (std::size_t index = 0; index < 7; ++index) {
-		value = ztdc_va_arg(vl, large);
-		REQUIRE(value.value == static_cast<decltype(value.value)>(index + 2));
-		accumulation.value *= value.value;
-	}
-	ztdc_va_end(vl);
-	return accumulation;
-}
 
 TEST_CASE("vargs/smalls", "check small struct multiples from 1 to 8 through va_args") {
 	constexpr std::uint_least64_t expected_canary0 = 309231971931137ULL;
@@ -147,17 +134,6 @@ TEST_CASE("vargs/large", "check large struct multiples from 1 to 8 through va_ar
 		REQUIRE(canary0 == expected_canary0);                    \
 	}                                                             \
 	static_assert(true, "🙏")
-
-	SECTION("large mul7x") {
-		std::uint_least64_t canary0 = expected_canary0;
-		large value                 = large_mul7x((large { static_cast<long long>(2), {} }),
-               (large { static_cast<long long>(3), {} }), (large { static_cast<long long>(4), {} }),
-               (large { static_cast<long long>(5), {} }), (large { static_cast<long long>(6), {} }),
-               (large { static_cast<long long>(7), {} }),
-               (large { static_cast<long long>(8), {} }));
-		REQUIRE(value.value == ((large { static_cast<long long>(40320), {} }).value));
-		REQUIRE(canary0 == expected_canary0);
-	}
 
 	MUL_SECTION(
 	     0, (large { static_cast<long long>(1), {} }), (large { static_cast<long long>(2), {} }));

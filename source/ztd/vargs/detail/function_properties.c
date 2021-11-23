@@ -27,57 +27,9 @@
 //
 // ============================================================================>
 
-#ifndef ZTD_VARGS_VA_LIST_H
-#define ZTD_VARGS_VA_LIST_H
-
 #include <ztd/vargs/version.h>
 
-#if ZTD_IS_ON(ZTD_C_I_)
-#include <stddef.h>
-#include <stdint.h>
-#include <stdarg.h>
-#else
-#include <cstddef>
-#include <cstdint>
-#include <cstdarg>
-#endif
+#include <ztd/vargs/detail/function_properties.h>
 
-ZTD_EXTERN_C_OPEN_I_
-
-//////
-/// @addtogroup ztd_vargs_va_list va_list Type
-///
-/// @{
-//////
-
-typedef struct ztdc_va_list {
-	//////
-	/// @brief Private. Do not use.
-	size_t __argument_position;
-	//////
-	/// @brief Private. Do not use.
-	void* __stack_position;
-	//////
-	/// @brief Private. Do not use.
-	void* __post_home_stack_position;
-	//////
-	/// @brief Private. Do not use.
-	void* __home[9];
-} ztdc_va_list;
-
-//////
-/// @typedef ztdc_va_list
-///
-/// @brief The `va_list` type. Can be used in any scenario where the argument list is empty.
-///
-/// @remarks Currently, only C++ supports such a declaration: Standard C compilers will break on it.
-//////
-
-//////
-/// @}
-//////
-
-
-ZTD_EXTERN_C_CLOSE_I_
-
-#endif // ZTD_VARGS_VA_LIST_H
+extern __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties
+     = { false, _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER, 0 };

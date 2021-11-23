@@ -42,7 +42,7 @@ typedef enum __ztdc_vargs_detail_broad_type {
 } __ztdc_vargs_detail_broad_type;
 
 #if ZTD_IS_ON(ZTD_C_I_)
-#define __ztdc_vargs_detail_select_broad_type(_TYPE)                                       \
+#define _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE)                                        \
 	(_Generic(*((_TYPE*)0), char                                                          \
 	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned char                          \
 	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, signed char                            \
@@ -66,22 +66,22 @@ typedef enum __ztdc_vargs_detail_broad_type {
 template <typename _Type>
 __ztdc_vargs_detail_broad_type __ztdc_vargs_detail_select_broad_type_cxx() noexcept {
 	if constexpr (::std::is_pointer_v<_Type>) {
-		return _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER;
+		return __ztdc_vargs_detail_broad_type::_ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER;
 	}
 	else if constexpr (::std::is_integral_v<_Type>) {
-		return _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT;
+		return __ztdc_vargs_detail_broad_type::_ZTDC_VARGS_DETAIL_BROAD_TYPE_INT;
 	}
 	else if constexpr (::std::is_floating_point_v<_Type>) {
-		return _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT;
+		return __ztdc_vargs_detail_broad_type::_ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT;
 	}
 	else {
 		return ((sizeof(_Type) <= sizeof(void*)) && ::std::is_aggregate_v<_Type>)
-		     ? _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER
-		     : _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE;
+		     ? __ztdc_vargs_detail_broad_type::_ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER
+		     : __ztdc_vargs_detail_broad_type::_ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE;
 	}
 }
 
-#define __ztdc_vargs_detail_select_broad_type(_TYPE) \
+#define _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE) \
 	__ztdc_vargs_detail_select_broad_type_cxx<_TYPE>()
 
 #endif

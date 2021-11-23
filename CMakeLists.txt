@@ -47,7 +47,7 @@ project(ztd.vargs
   VERSION 0.0.0
   DESCRIPTION [[Code to access Variable Arguments ("var args") without the cruft of an inital first parameter.]]
   HOMEPAGE_URL "https://ztdvargs.readthedocs.io/en/latest/"
-  LANGUAGES C CXX ASM_MASM ASM)
+  LANGUAGES C CXX ASM_MASM)
 
 if(ZTD_VARGS_READTHEDOCS)
 	# ReadTheDocs seems unable to handle the include at the project level: something must be going wrong?
@@ -121,7 +121,7 @@ file(GLOB_RECURSE ztd.vargs.sources
 	CONFIGURE_DEPENDS
 	source/*.c source/*.cpp)
 
-set(ztd.vargs.sources.prefix "${CMAKE_CURRENT_SOURCE_DIR}/source/ztd/vargs"
+set(ztd.vargs.sources.prefix "${CMAKE_CURRENT_SOURCE_DIR}/source/ztd/vargs")
 if(WIN32)
 	# CMAKE_SYSTEM_PROCESSOR will be the result of %PROCESSOR_ARCHITEW6432%, 
 	# and thus will be one of {AMD64, IA64, ARM64, x86, ARM}

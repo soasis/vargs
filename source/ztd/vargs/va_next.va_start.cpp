@@ -40,7 +40,7 @@
 	#else
 		#if defined(_M_AMD64)
 			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_ON
-			#include "windows/vc++/x64.hpp"
+			#include "windows/x64.hpp"
 		// #elif defined(_M_IX86)
 		// #elif defined(_M_ARM)
 		// #elif defined(_M_ARM64)
@@ -57,8 +57,8 @@
 	//#elif defined(__arm__)
 	//#elif defined(__aarch64__)
 	//#elif defined(__s390x__)
-	//#elif (defined(__ppc64__) || defined(__PPC64__) || defined(__ppc64le__) || defined(__PPC64LE__)) \
-		&& defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+	//#elif (defined(__ppc64__) || defined(__PPC64__) || defined(__ppc64le__) || defined(__PPC64LE__))
+	//       && defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 	#else
 		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 	#endif

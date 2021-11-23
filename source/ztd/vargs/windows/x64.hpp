@@ -53,9 +53,15 @@ namespace {
 	void* __ztdc_vcxx_x64_vararg_to_value(void*& __arg, size_t __position, size_t __size,
 	     size_t __alignment, __ztdc_vargs_detail_broad_type __broad_type) noexcept {
 		if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE) {
-			// references are returned as a single indirection, so they can be used directly:
-			// T* -> void* -> T* -> T&
-			return __arg;
+			// references are returned as a single indirection contained at the given location,
+			// so they must be indirected once:
+			// T** -> (deref) -> T* -> void* -> T* -> T&
+			if constexpr (_IsIndirect) {
+				return __arg;
+			}
+			else {
+				return *(reinterpret_cast<void**>(__arg));
+			}
 		}
 		else {
 			if (__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT) {
@@ -89,31 +95,25 @@ namespace {
 	}
 } // namespace
 
-extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address) noexcept {
+extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address,
+     __ztdc_vargs_detail_function_properties __properties) noexcept {
 	ztdc_va_list& __vl       = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
-	__vl.__stack_position    = __return_address;
-	__vl.__argument_position = 0;
-	__vl.__home[0]           = __ztdc_vcxx_x64_read_homed_register_rcx(__vl.__stack_position);
-	__vl.__home[1]           = __ztdc_vcxx_x64_read_homed_register_rdx(__vl.__stack_position);
-	__vl.__home[2]           = __ztdc_vcxx_x64_read_homed_register_r8(__vl.__stack_position);
-	__vl.__home[3]           = __ztdc_vcxx_x64_read_homed_register_r9(__vl.__stack_position);
-#if 0
-	// xmm registers are very flaky and cannot be depended on
-	// when writing C or C++ code
-	double __xmm0_val        = __ztdc_vcxx_x64_read_register_xmm0();
-	double __xmm1_val        = __ztdc_vcxx_x64_read_register_xmm1();
-	double __xmm2_val        = __ztdc_vcxx_x64_read_register_xmm2();
-	double __xmm3_val        = __ztdc_vcxx_x64_read_register_xmm3();
-	__vl.__home[4]           = *reinterpret_cast<void**>(&__xmm0_val);
-	__vl.__home[5]           = *reinterpret_cast<void**>(&__xmm1_val);
-	__vl.__home[6]           = *reinterpret_cast<void**>(&__xmm2_val);
-	__vl.__home[7]           = *reinterpret_cast<void**>(&__xmm3_val);
-#else
+	bool __uses_indirect_struct_return_value_at_start = __properties.__return_value_aggregate
+	     && __properties.__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE;
+	void* __rehome_position  = __uses_indirect_struct_return_value_at_start
+	      ? reinterpret_cast<void*>(reinterpret_cast<unsigned char*>(__return_address) + 8)
+	      : __return_address;
+	__vl.__stack_position    = __rehome_position;
+	__vl.__post_home_stack_position    = __return_address;
+	__vl.__argument_position = 0 + __properties.__argument_count;
+	__vl.__home[0]           = __ztdc_vcxx_x64_read_homed_register_rcx(__rehome_position);
+	__vl.__home[1]           = __ztdc_vcxx_x64_read_homed_register_rdx(__rehome_position);
+	__vl.__home[2]           = __ztdc_vcxx_x64_read_homed_register_r8(__rehome_position);
+	__vl.__home[3]           = __ztdc_vcxx_x64_read_homed_register_r9(__rehome_position);
 	__vl.__home[4] = __vl.__home[0];
 	__vl.__home[5] = __vl.__home[1];
 	__vl.__home[6] = __vl.__home[2];
 	__vl.__home[7] = __vl.__home[3];
-#endif
 	__vl.__home[8] = nullptr;
 }
 
