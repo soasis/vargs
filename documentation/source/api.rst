@@ -63,9 +63,7 @@ Each given function aids in iterating over a ``ztdc_va_list``. Currently, the li
 Even the named argument ``a`` and ``b`` will be iterated over. (A future revision of this library may correct for this, but it is how it is for now.) This means that you should avoid using this when there are arguments present in the list, and therefore wish to execute ``
 
 
-Currently supported:
-
-- MSVC, x64
+See the :doc:`architecture list</architectures/vc++/x64>` for supported architectures.
 
 
 
@@ -75,6 +73,8 @@ Functions
 .. doxygentypedef:: ztdc_va_list
 
 .. doxygendefine:: ztdc_va_start
+
+.. doxygendefine:: ztdc_va_start_in
 
 .. doxygendefine:: ztdc_va_arg
 
