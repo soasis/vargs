@@ -1,7 +1,7 @@
 # =============================================================================
 #
 # ztd.vargs
-# Copyright © 2021 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+# Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 # Contact: opensource@soasis.org
 #
 # Commercial License Usage
@@ -97,11 +97,11 @@ if(ZTD_IS_TOP_LEVEL_PROJECT)
 		check_compiler_flag(warn-pedantic MSVC /permissive- GCC -pedantic)
 		check_compiler_flag(warn-all MSVC /W4 GCC -Wall)
 		check_compiler_flag(warn-errors MSVC /WX GCC -Werror)
-		check_compiler_flag(warn-extra GCC -Wextra CLANG -Wextra)
+		check_compiler_flag(warn-extra GCC -Wextra Clang -Wextra)
 		check_compiler_flag(utf8-literal-encoding MSVC /execution-charset:utf-8 GCC -fexec-charset=utf-8)
 		check_compiler_flag(utf8-source-encoding MSVC /source-charset:utf-8 GCC -finput-charset=utf-8)
-		check_compiler_flag(extra-constexpr-depth MSVC /constexpr:depth2147483647 GCC -fconstexpr-depth=2147483647 CLANG -fconstexpr-depth=2147483647)
-		check_compiler_flag(extra-constexpr-steps MSVC /constexpr:steps2147483647 GCC -fconstexpr-ops-limit=2147483647 CLANG -fconstexpr-steps=2147483647)
+		check_compiler_flag(extra-constexpr-depth MSVC /constexpr:depth2147483647 GCC -fconstexpr-depth=2147483647 Clang -fconstexpr-depth=2147483647)
+		check_compiler_flag(extra-constexpr-steps MSVC /constexpr:steps2147483647 GCC -fconstexpr-ops-limit=2147483647 Clang -fconstexpr-steps=2147483647)
 		check_compiler_flag(template-debugging-mode GCC -ftemplate-backtrace-limit=0)
 	endif()
 endif()
@@ -212,8 +212,7 @@ endif()
 # For quick debugging and development only: don't peek! 🙈
 mark_as_advanced(ZTD_VARGS_SCRATCH)
 if(ZTD_VARGS_SCRATCH)
-	add_executable(scratch main.cpp)
-	target_link_libraries(scratch PRIVATE ztd::vargs)
+	add_executable(scratch main.c scratch.c)
 	target_compile_options(scratch
 		PRIVATE
 		${--template-debugging-mode}

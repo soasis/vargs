@@ -1,7 +1,7 @@
 // =============================================================================
 //
 // ztd.vargs
-// Copyright © 2021 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+// Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 // Contact: opensource@soasis.org
 //
 // Commercial License Usage
@@ -25,7 +25,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// ============================================================================>
+// ============================================================================ //
 
 #include <catch2/catch.hpp>
 
@@ -53,8 +53,8 @@ namespace {
 		TYPE accumulation           = { 1, {} };                                         \
 		[[maybe_unused]] TYPE value = { 0, {} };                                         \
 		ztdc_va_list vl;                                                                 \
-		auto* f = &NAME##_mul##N<int>;\
-		ztdc_va_start_in(vl, f);                                                               \
+		auto* f = &NAME##_mul##N<int>;                                                   \
+		ztdc_va_start_in(vl, f);                                                         \
 		if constexpr (std::is_same_v<T, int> && N > 0) {                                 \
 			for (std::size_t index = 0; index < N; ++index) {                           \
 				value = ztdc_va_arg(vl, TYPE);                                         \

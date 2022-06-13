@@ -1,7 +1,7 @@
 // =============================================================================
 //
 // ztd.vargs
-// Copyright © 2021 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+// Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 // Contact: opensource@soasis.org
 //
 // Commercial License Usage
@@ -25,7 +25,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// ============================================================================>
+// ============================================================================ //
 
 #ifndef ZTD_VARGS_SOURCE_STUB_HPP
 #define ZTD_VARGS_SOURCE_STUB_HPP
@@ -39,7 +39,8 @@
 #include <cstdlib>
 
 extern "C" void __ztdc_va_start([[maybe_unused]] ztdc_va_list* __p_untyped_vl,
-     [[maybe_unused]] void* __return_address, [[maybe_unused]] __ztdc_vargs_detail_function_properties __properties) noexcept {
+     [[maybe_unused]] void* __return_address,
+     [[maybe_unused]] __ztdc_vargs_detail_function_properties __properties) noexcept {
 	std::abort();
 }
 

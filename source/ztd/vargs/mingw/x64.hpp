@@ -1,7 +1,7 @@
 // =============================================================================
 //
 // ztd.vargs
-// Copyright © 2021 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+// Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 // Contact: opensource@soasis.org
 //
 // Commercial License Usage
@@ -25,7 +25,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// ============================================================================>
+// ============================================================================ //
 
 #ifndef ZTD_VARGS_SOURCE_WINDOWS_GCC_X64_HPP
 #define ZTD_VARGS_SOURCE_WINDOWS_GCC_X64_HPP

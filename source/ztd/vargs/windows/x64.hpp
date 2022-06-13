@@ -1,7 +1,7 @@
 // =============================================================================
 //
 // ztd.vargs
-// Copyright © 2021 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+// Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 // Contact: opensource@soasis.org
 //
 // Commercial License Usage
@@ -25,7 +25,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// ============================================================================>
+// ============================================================================ //
 
 #ifndef ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
 #define ZTD_VARGS_SOURCE_WINDOWS_VCXX_X64_HPP
@@ -97,24 +97,24 @@ namespace {
 
 extern "C" void __ztdc_va_start(ztdc_va_list* __p_untyped_vl, void* __return_address,
      __ztdc_vargs_detail_function_properties __properties) noexcept {
-	ztdc_va_list& __vl       = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
+	ztdc_va_list& __vl = *static_cast<ztdc_va_list*>(static_cast<void*>(__p_untyped_vl));
 	bool __uses_indirect_struct_return_value_at_start = __properties.__return_value_aggregate
 	     && __properties.__broad_type == _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE;
-	void* __rehome_position  = __uses_indirect_struct_return_value_at_start
-	      ? reinterpret_cast<void*>(reinterpret_cast<unsigned char*>(__return_address) + 8)
-	      : __return_address;
-	__vl.__stack_position    = __rehome_position;
-	__vl.__post_home_stack_position    = __return_address;
-	__vl.__argument_position = 0 + __properties.__argument_count;
-	__vl.__home[0]           = __ztdc_vcxx_x64_read_homed_register_rcx(__rehome_position);
-	__vl.__home[1]           = __ztdc_vcxx_x64_read_homed_register_rdx(__rehome_position);
-	__vl.__home[2]           = __ztdc_vcxx_x64_read_homed_register_r8(__rehome_position);
-	__vl.__home[3]           = __ztdc_vcxx_x64_read_homed_register_r9(__rehome_position);
-	__vl.__home[4] = __vl.__home[0];
-	__vl.__home[5] = __vl.__home[1];
-	__vl.__home[6] = __vl.__home[2];
-	__vl.__home[7] = __vl.__home[3];
-	__vl.__home[8] = nullptr;
+	void* __rehome_position         = __uses_indirect_struct_return_value_at_start
+	             ? reinterpret_cast<void*>(reinterpret_cast<unsigned char*>(__return_address) + 8)
+	             : __return_address;
+	__vl.__stack_position           = __rehome_position;
+	__vl.__post_home_stack_position = __return_address;
+	__vl.__argument_position        = 0 + __properties.__argument_count;
+	__vl.__home[0]                  = __ztdc_vcxx_x64_read_homed_register_rcx(__rehome_position);
+	__vl.__home[1]                  = __ztdc_vcxx_x64_read_homed_register_rdx(__rehome_position);
+	__vl.__home[2]                  = __ztdc_vcxx_x64_read_homed_register_r8(__rehome_position);
+	__vl.__home[3]                  = __ztdc_vcxx_x64_read_homed_register_r9(__rehome_position);
+	__vl.__home[4]                  = __vl.__home[0];
+	__vl.__home[5]                  = __vl.__home[1];
+	__vl.__home[6]                  = __vl.__home[2];
+	__vl.__home[7]                  = __vl.__home[3];
+	__vl.__home[8]                  = nullptr;
 }
 
 extern "C" void* __ztdc_va_next(ztdc_va_list* __p_vl, size_t __size, size_t __alignment,
