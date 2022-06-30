@@ -32,7 +32,7 @@
 
 #include <ztd/vargs/version.h>
 
-#if ZTD_IS_ON(ZTD_C_I_)
+#if ZTD_IS_ON(ZTD_C)
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>

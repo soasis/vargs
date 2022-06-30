@@ -34,7 +34,7 @@
 
 #include <ztd/vargs/detail/broad_type.h>
 
-#if ZTD_IS_ON(ZTD_C_I_)
+#if ZTD_IS_ON(ZTD_C)
 #include <stdbool.h>
 #endif
 
@@ -48,7 +48,7 @@ ZTD_EXTERN_C_OPEN_I_
 extern __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_empty_properties(void);
 ZTD_EXTERN_C_CLOSE_I_
 
-#if ZTD_IS_ON(ZTD_C_I_)
+#if ZTD_IS_ON(ZTD_C)
 #define _ZTDC_FUNCTION_PROPERTIES(...) __ztdc_vargs_detail_empty_properties
 #else
 

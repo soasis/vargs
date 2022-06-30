@@ -33,9 +33,9 @@
 
 // clang-format off
 // windows
-#if ZTD_IS_ON(ZTD_PLATFORM_WINDOWS_I_)
+#if ZTD_IS_ON(ZTD_PLATFORM_WINDOWS)
 	// mingw
-	#if ZTD_IS_ON(ZTD_COMPILER_GCC_I_)
+	#if ZTD_IS_ON(ZTD_COMPILER_GCC)
 		#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 	#else
 		#if defined(_M_AMD64)
@@ -48,7 +48,7 @@
 			#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 		#endif
 	#endif
-#elif ZTD_IS_ON(ZTD_COMPILER_GCC_I_) || ZTD_IS_ON(ZTD_COMPILER_CLANG_I_)
+#elif ZTD_IS_ON(ZTD_COMPILER_GCC) || ZTD_IS_ON(ZTD_COMPILER_CLANG)
 	// on non-windows platforms, clang follows the same ABI as GCC
 	// the following list is taken from microsoft/vcpkg-tool@f6e44dfbd3bb8aaa142ce090098f078547af5f3f
 	#if defined(__x86_64__)
@@ -67,7 +67,7 @@
 	#define ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_ ZTD_OFF
 #endif
 
-#if ZTD_IS_OFF(ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI_I_)
+#if ZTD_IS_OFF(ZTD_VARGS_SOURCE_FOUND_PLATFORM_ABI)
 	#include "stub.hpp"
 #endif
 

@@ -41,7 +41,7 @@ typedef enum __ztdc_vargs_detail_broad_type {
 	_ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE
 } __ztdc_vargs_detail_broad_type;
 
-#if ZTD_IS_ON(ZTD_C_I_)
+#if ZTD_IS_ON(ZTD_C)
 #define _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE)                                        \
 	(_Generic(*((_TYPE*)0), char                                                          \
 	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned char                          \
