@@ -98,46 +98,47 @@ autosectionlabel_prefix_document = True
 # ReadTheDocs Build Help
 #
 def run_cmake_doxygen():
-	"""Run the cmake command to get the doxygen sources"""
+    """Run the cmake command to get the doxygen sources"""
 
-	# Make sure the directory exists
-	cmake_dir = os.path.join(os.getcwd(), '_build/cmake-build')
-	xml_dir = os.path.join(cmake_dir, 'documentation/doxygen/xml')
-	os.makedirs(cmake_dir, exist_ok=True)
-	os.makedirs(xml_dir, exist_ok=True)
-	print("[ztd.vargs/documentation/conf.py] CMake Directory: %s" % cmake_dir)
-	print("[ztd.vargs/documentation/conf.py] XML Directory: %s" % xml_dir)
+    # Make sure the directory exists
+    cmake_dir = os.path.join(os.getcwd(), '_build/cmake-build')
+    xml_dir = os.path.join(cmake_dir, 'documentation/doxygen/xml')
+    os.makedirs(cmake_dir, exist_ok=True)
+    os.makedirs(xml_dir, exist_ok=True)
+    print("[ztd.vargs/documentation/conf.py] CMake Directory: %s" % cmake_dir)
+    print("[ztd.vargs/documentation/conf.py] XML Directory: %s" % xml_dir)
 
-	try:
-		retcode = subprocess.call(
-		    "cmake -DZTD_VARGS_READTHEDOCS:BOOL=TRUE -DZTD_VARGS_DOCUMENTATION:BOOL=TRUE -DZTD_VARGS_DOCUMENTATION_NO_SPHINX:BOOL=TRUE ../../../..",
-		    shell=True,
-		    cwd=cmake_dir)
-	except OSError as e:
-		sys.stderr.write("cmake generation execution failed: %s\n" % e)
-		return
+    try:
+        retcode = subprocess.call(
+            "cmake -DZTD_VARGS_READTHEDOCS:BOOL=TRUE -DZTD_VARGS_DOCUMENTATION:BOOL=TRUE -DZTD_VARGS_DOCUMENTATION_NO_SPHINX:BOOL=TRUE ../../../..",
+            shell=True,
+            cwd=cmake_dir)
+    except OSError as e:
+        sys.stderr.write("cmake generation execution failed: %s\n" % e)
+        return
 
-	try:
-		retcode = subprocess.call("cmake --build .",
-		                          shell=True,
-		                          cwd=cmake_dir)
-	except OSError as e:
-		sys.stderr.write("cmake generation execution failed: %s\n" % e)
-		return
+    try:
+        retcode = subprocess.call(
+            "cmake --build . --target ztd.vargs.documentation.doxygen",
+            shell=True,
+            cwd=cmake_dir)
+    except OSError as e:
+        sys.stderr.write("cmake generation execution failed: %s\n" % e)
+        return
 
-	breathe_projects["ztd.vargs"] = xml_dir
+    breathe_projects["ztd.vargs"] = xml_dir
 
 
 def generate_doxygen_xml(app):
-	"""Run the doxygen make commands if we're on the ReadTheDocs server"""
+    """Run the doxygen make commands if we're on the ReadTheDocs server"""
 
-	read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
-	if read_the_docs_build:
-		run_cmake_doxygen()
+    if read_the_docs_build:
+        run_cmake_doxygen()
 
 
 def setup(app):
 
-	# Add hook for building doxygen xml when needed
-	app.connect("builder-inited", generate_doxygen_xml)
+    # Add hook for building doxygen xml when needed
+    app.connect("builder-inited", generate_doxygen_xml)
