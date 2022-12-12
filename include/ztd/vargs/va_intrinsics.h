@@ -88,7 +88,6 @@ void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 /// This call may not work well for everything, since occasionally critical information is missing
 /// from just the raw function call. Prefer ztdc_va_arg_in, which takes both a ztdc_va_list and the
 /// name of the function it is within.
-//////
 #define ztdc_va_start(_VL) __ztdc_va_start_platform(_VL)
 //////
 /// @brief Initializes and starts up the iteration of a `...` argument list!
@@ -106,7 +105,6 @@ void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 /// the internal implementation. This is important for functions which return large structs that are
 /// placed in special positions thanks to Return Value Optimization (RVO), Indirect Struct Return
 /// Optimizatino (ISRO), and other behaviors specific to a given platform/ABI/compiler architecture.
-//////
 #define ztdc_va_start_in(_VL, ...) __ztdc_va_start_platform_in(_VL, __VA_ARGS__)
 
 //////
@@ -124,7 +122,6 @@ void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 /// statically-known and variable arguments!
 ///
 /// @par Cursed?
-//////
 #define ztdc_va_arg(_VL, _TYPE) \
 	*(_TYPE*)__ztdc_va_next(   \
 	     &_VL, sizeof(_TYPE), alignof(_TYPE), _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE));
@@ -138,7 +135,6 @@ void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 /// - The `_VL` parameter must have been previously initialized by a call to ztdc_va_start.
 ///
 /// @par Cursed?
-//////
 #define ztdc_va_end(_VL) __ztdc_va_end(&_VL);
 
 //////
@@ -148,4 +144,4 @@ void __ztdc_va_end(ztdc_va_list* __vl) ZTD_NOEXCEPT_IF_CXX_I_;
 
 ZTD_EXTERN_C_CLOSE_I_
 
-#endif // ZTD_VARGS_VA_INTRINSIC_H
+#endif

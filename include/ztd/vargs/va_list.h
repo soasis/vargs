@@ -80,4 +80,4 @@ typedef struct ztdc_va_list {
 
 ZTD_EXTERN_C_CLOSE_I_
 
-#endif // ZTD_VARGS_VA_LIST_H
+#endif

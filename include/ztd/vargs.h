@@ -35,4 +35,4 @@
 #include <ztd/vargs/va_list.h>
 #include <ztd/vargs/va_intrinsics.h>
 
-#endif // ZTD_VARGS_H
+#endif

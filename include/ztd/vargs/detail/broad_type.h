@@ -86,4 +86,4 @@ __ztdc_vargs_detail_broad_type __ztdc_vargs_detail_select_broad_type_cxx() noexc
 
 #endif
 
-#endif // ZTD_VARGS_DETAIL_BROAD_TYPE_H
+#endif

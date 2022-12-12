@@ -32,4 +32,4 @@
 
 #include <ztd/vargs.h>
 
-#endif // ZTD_VARGS_HPP
+#endif

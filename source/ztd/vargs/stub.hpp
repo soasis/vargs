@@ -50,4 +50,4 @@ extern "C" void* __ztdc_va_next([[maybe_unused]] ztdc_va_list* __p_vl,
 	std::abort();
 }
 
-#endif // ZTD_VARGS_SOURCE_STUB_HPP
+#endif

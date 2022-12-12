@@ -32,4 +32,4 @@
 
 #include <ztd/version.h>
 
-#endif // ZTD_VARGS_VERSION_H
+#endif

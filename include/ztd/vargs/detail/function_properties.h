@@ -84,4 +84,4 @@ __ztdc_vargs_detail_function_properties __ztdc_vargs_detail_function_properties_
 	__ztdc_vargs_detail_function_properties_cxx<decltype(__VA_ARGS__)>()
 #endif
 
-#endif // ZTD_VARGS_DETAIL_FUNCTION_PROPERTIES_H
+#endif
