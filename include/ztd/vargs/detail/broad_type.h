@@ -1,7 +1,7 @@
 // =============================================================================
 //
 // ztd.vargs
-// Copyright © 2022 JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
+// Copyright © JeanHeyd "ThePhD" Meneide and Shepherd's Oasis, LLC
 // Contact: opensource@soasis.org
 //
 // Commercial License Usage
@@ -17,7 +17,7 @@
 // Version 2.0 (the "License"); you may not use this file except in compliance
 // with the License. You may obtain a copy of the License at
 //
-// 		http://www.apache.org/licenses/LICENSE-2.0
+// https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,24 +42,24 @@ typedef enum __ztdc_vargs_detail_broad_type {
 } __ztdc_vargs_detail_broad_type;
 
 #if ZTD_IS_ON(ZTD_C)
-#define _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE)                                        \
-	(_Generic(*((_TYPE*)0), char                                                          \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned char                          \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, signed char                            \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, _Bool                                  \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, short                                  \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned short                         \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, int                                    \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned int                           \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, long                                   \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned long                          \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, long long                              \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, unsigned long long                     \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT, float                                  \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT, double                               \
-	          : _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT, default                              \
-	          : ((sizeof(_TYPE) <= sizeof(void*)) ? _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER \
-	                                              : _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE)))
+#define _ZTDC_VARGS_DETAIL_SELECT_BROAD_TYPE(_TYPE)                                          \
+	(_Generic(*((_TYPE*)0),                                                                 \
+	     char: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                           \
+	     unsigned char: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                  \
+	     signed char: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                    \
+	     _Bool: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                          \
+	     short: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                          \
+	     unsigned short: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                 \
+	     int: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                            \
+	     unsigned int: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                   \
+	     long: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                           \
+	     unsigned long: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                  \
+	     long long: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                                      \
+	     unsigned long long: _ZTDC_VARGS_DETAIL_BROAD_TYPE_INT,                             \
+	     float: _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT,                                        \
+	     double: _ZTDC_VARGS_DETAIL_BROAD_TYPE_FLOAT,                                       \
+	     default: ((sizeof(_TYPE) <= sizeof(void*)) ? _ZTDC_VARGS_DETAIL_BROAD_TYPE_POINTER \
+	                                                : _ZTDC_VARGS_DETAIL_BROAD_TYPE_REFERENCE)))
 #else
 #include <type_traits>
 
